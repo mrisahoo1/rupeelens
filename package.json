@@ -1,0 +1,13 @@
+{
+  "name": "rupeelens",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": ["apps/web", "packages/shared"],
+  "scripts": {
+    "dev": "npm run dev -w apps/web",
+    "build": "npm run build -w apps/web",
+    "typecheck": "npm run typecheck -w apps/web",
+    "test:api": "cd apps/api && pytest",
+    "seed:demo": "python apps/api/scripts/seed_demo.py"
+  }
+}

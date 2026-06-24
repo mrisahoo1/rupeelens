@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "buildCommand": "npm install && npm run build -w apps/web",
+  "outputDirectory": "apps/web/dist",
+  "installCommand": "npm install && python -m pip install -r apps/api/requirements.txt",
+  "functions": {
+    "apps/api/api/index.py": { "runtime": "python3.11" }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/apps/api/api/index.py" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

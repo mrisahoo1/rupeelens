@@ -1,0 +1,9 @@
+@tailwind base; @tailwind components; @tailwind utilities;
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin:0; min-height:100vh; background:#06100e; color:#eefcf7; font-family: Manrope, ui-sans-serif, system-ui; background-image: radial-gradient(circle at 15% 10%, rgba(89,243,195,.20), transparent 26rem), radial-gradient(circle at 85% 0%, rgba(255,180,84,.16), transparent 24rem), linear-gradient(135deg,#07110f,#0c1715 45%,#11100c); }
+body:before { content:''; position:fixed; inset:0; pointer-events:none; opacity:.24; background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px); background-size: 44px 44px; mask-image: linear-gradient(to bottom, black, transparent 85%); }
+button,input,select,textarea { font: inherit; }
+.glass { background: linear-gradient(145deg, rgba(255,255,255,.12), rgba(255,255,255,.045)); border: 1px solid rgba(255,255,255,.12); box-shadow: 0 24px 80px rgba(0,0,0,.22); backdrop-filter: blur(22px); }
+.card { border-radius: 8px; }
+.no-scrollbar::-webkit-scrollbar { display:none; }

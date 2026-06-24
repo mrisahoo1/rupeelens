@@ -1,0 +1,1 @@
+export default { content: ['./index.html','./src/**/*.{ts,tsx}'], theme: { extend: { fontFamily: { sans: ['Manrope','ui-sans-serif','system-ui'], display: ['Satoshi','Manrope','ui-sans-serif'] }, colors: { ink: '#07110f', emeraldx: '#59f3c3', saffronx: '#ffb454', glass: 'rgba(255,255,255,0.08)' }, boxShadow: { glow: '0 0 80px rgba(89,243,195,.18)' } } }, plugins: [] };

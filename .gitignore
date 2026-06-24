@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+.pytest_cache/
+node_modules/
+dist/
+.env
+*.db
+uploads/
+.vercel/
+.DS_Store
+
+*.tsbuildinfo
+*.log
+*.err

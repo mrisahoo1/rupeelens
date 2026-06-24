@@ -1,0 +1,6 @@
+import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '../api';
+import { currentMonth, rupee } from '../lib';
+import { Button, Card, Input } from '../components/ui';
+export default function Reports(){ const [month,setMonth]=useState(currentMonth()); const {data:r}=useQuery({queryKey:['report',month], queryFn:()=>api.report(month)}); return <div className="grid gap-5"><Card><div className="flex flex-wrap gap-3"><Input className="max-w-44" type="month" value={month} onChange={e=>setMonth(e.target.value)}/><a href={`/api/reports/export.csv?month=${month}`}><Button>Export CSV</Button></a><a href={`/api/reports/export.pdf?month=${month}`}><Button>Export PDF</Button></a></div></Card><div className="grid gap-4 md:grid-cols-3"><Card><p className="text-white/45">Monthly spend</p><h3 className="mt-2 text-3xl font-black">{rupee(r?.total_spend)}</h3></Card><Card><p className="text-white/45">Awareness score</p><h3 className="mt-2 text-3xl font-black text-emeraldx">{r?.financial_awareness_score || 0}/100</h3></Card><Card><p className="text-white/45">Top merchant</p><h3 className="mt-2 text-3xl font-black">{r?.top_merchant}</h3></Card></div></div> }
