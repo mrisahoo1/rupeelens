@@ -19,3 +19,11 @@ def test_dedupe_hash_is_stable():
     a = dedupe_hash(1, date(2026,6,1), 100.0, 'Zomato', 'abc')
     b = dedupe_hash(1, date(2026,6,1), 100, 'zomato', 'abc')
     assert a == b
+
+def test_amount_only_csv_does_not_treat_description_as_credit_column(tmp_path):
+    from app.parsers.generic import CSVParser
+    path = tmp_path / 'upi.csv'
+    path.write_text('date,description,amount\n2026-06-25,UPI/ZOMATO/ORDER 123,321\n')
+    row = CSVParser().parse(str(path), 'UPI CSV/XLSX')[0]
+    assert row.direction == 'debit'
+    assert row.amount == 321

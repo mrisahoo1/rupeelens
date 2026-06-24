@@ -14,7 +14,10 @@ def _find(cols, keys):
     lowered = {str(c).strip().lower(): c for c in cols}
     for key in keys:
         for low, original in lowered.items():
-            if key in low:
+            if len(key) <= 2:
+                if low == key or low.endswith(f' {key}') or low.startswith(f'{key} '):
+                    return original
+            elif key in low:
                 return original
     return None
 
@@ -76,3 +79,4 @@ def parser_for(filename: str) -> BaseParser:
     if low.endswith(('.xlsx', '.xls')): return XLSXParser()
     if low.endswith('.pdf'): return PDFParser()
     raise ValueError('Unsupported file type')
+

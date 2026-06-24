@@ -11,3 +11,16 @@ def test_transaction_edit_creates_user_rule(client, demo_headers):
     assert res.status_code == 200
     rules = client.get('/api/rules', headers=demo_headers).json()
     assert any(r['created_from_user_correction'] and r['category'] == 'Food & Dining' for r in rules)
+
+def test_csv_upload_preview_and_confirm_for_main_user(client, main_headers):
+    csv = 'date,description,amount\n2026-06-25,UPI/ZOMATO/ORDER 123,321\n2026-06-26,CRED CC PAYMENT,12000\n'
+    preview = client.post('/api/uploads', headers=main_headers, data={'source_type':'UPI CSV/XLSX'}, files=[('files', ('sample.csv', csv.encode(), 'text/csv'))])
+    assert preview.status_code == 200
+    batch = preview.json()[0]
+    assert batch['parsed_rows'][0]['transaction_date'] == '2026-06-25'
+    confirm = client.post(f'/api/uploads/{batch["id"]}/confirm', headers=main_headers)
+    assert confirm.status_code == 200
+    assert confirm.json()['inserted'] == 2
+    summary = client.get('/api/dashboard/summary?month=2026-06', headers=main_headers).json()
+    assert summary['total_spend'] == 321
+    assert summary['excluded_transfers'] == 12000
