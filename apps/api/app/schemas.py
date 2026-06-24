@@ -10,3 +10,7 @@ class TransactionPatch(BaseModel): category: str | None = None; subcategory: str
 class ManualTransaction(BaseModel): transaction_date: date; description_raw: str; amount: float; direction: str = 'debit'; payment_mode: str = 'manual'; category: str | None = None; remark: str | None = None; revisit_flag: bool = False
 class BulkUpdate(BaseModel): ids: list[int]; category: str | None = None; tags: list[str] | None = None; revisit_flag: bool | None = None
 class ORMModel(BaseModel): model_config = ConfigDict(from_attributes=True)
+
+class AssistantQuery(BaseModel):
+    month: str
+    question: str

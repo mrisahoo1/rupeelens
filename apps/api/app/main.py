@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import Base, engine, SessionLocal
 from .seed import ensure_users
-from .routes import auth, accounts, uploads, transactions, dashboard, insights, budgets, rules, reports, integrations
+from .routes import auth, accounts, uploads, transactions, dashboard, insights, budgets, rules, reports, integrations, assistant
 
 app = FastAPI(title='RupeeLens API', version='0.1.0')
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_credentials=True, allow_methods=['*'], allow_headers=['*'])
@@ -16,6 +16,7 @@ app.include_router(budgets.router, prefix='/api')
 app.include_router(rules.router, prefix='/api')
 app.include_router(reports.router, prefix='/api')
 app.include_router(integrations.router, prefix='/api')
+app.include_router(assistant.router, prefix='/api')
 
 @app.on_event('startup')
 def startup():
@@ -26,3 +27,4 @@ def startup():
 
 @app.get('/api/health')
 def health(): return {'ok': True, 'service': 'rupeelens'}
+

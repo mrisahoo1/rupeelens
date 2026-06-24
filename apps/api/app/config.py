@@ -19,7 +19,12 @@ class Settings(BaseSettings):
     openai_api_key: str | None = None
     file_storage_mode: str = 'local'
     upload_dir: str = 'uploads'
+    enable_ollama_insights: bool = False
+    ollama_url: str = 'http://127.0.0.1:11434'
+    ollama_model: str = 'llama3.2'
+    ollama_timeout_seconds: int = 20
 
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
+

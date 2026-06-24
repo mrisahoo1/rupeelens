@@ -5,6 +5,7 @@ from ..models import Transaction
 from ..parsers.base import ParsedTransaction
 from .normalization import classify_flags, dedupe_hash, parse_date
 from .rules import categorize
+from .confidence import score_transaction_confidence
 
 def _json_safe_row(row: dict) -> dict:
     safe = row.copy()
@@ -20,7 +21,8 @@ def preview_rows(db: Session, user_id: int, parsed: list[ParsedTransaction], sou
         flags = classify_flags(item.description_raw, item.direction, item.amount)
         row_hash = dedupe_hash(user_id, item.transaction_date, item.amount, cat['merchant_normalized'], item.reference_id)
         duplicate = db.query(Transaction).filter(Transaction.user_id == user_id, Transaction.dedupe_hash == row_hash).first() is not None
-        row = {**item.__dict__, **cat, **flags, 'source_type': source_type, 'source_file_name': source_file_name, 'dedupe_hash': row_hash, 'is_duplicate': duplicate, 'account_id': getattr(account, 'id', None), 'card_name': getattr(account, 'name', None) if getattr(account, 'type', '') == 'credit_card' else None, 'card_last4': getattr(account, 'last4', None)}
+        confidence = score_transaction_confidence(item.description_raw, cat['merchant_normalized'], item.amount, item.transaction_date, item.direction, cat['category'], cat['category_source'], item.payment_mode, item.reference_id, duplicate, flags['is_excluded_from_spend'])
+        row = {**item.__dict__, **cat, **flags, 'source_type': source_type, 'source_file_name': source_file_name, 'dedupe_hash': row_hash, 'is_duplicate': duplicate, 'confidence_score': confidence.score, 'confidence_reasons': confidence.reasons, 'account_id': getattr(account, 'id', None), 'card_name': getattr(account, 'name', None) if getattr(account, 'type', '') == 'credit_card' else None, 'card_last4': getattr(account, 'last4', None)}
         rows.append(_json_safe_row(row))
     return rows
 
@@ -42,3 +44,4 @@ def confirm_rows(db: Session, user_id: int, batch_id: int, rows: list[dict]) -> 
         except IntegrityError:
             db.rollback()
     return inserted
+
