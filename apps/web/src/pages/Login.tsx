@@ -22,7 +22,7 @@ export default function Login(){
   const nav=useNavigate();
   async function doLogin(u=username,p=password){
     setLoading(true); setError('');
-    try{ const res=await api.login(u,p); tokenStore.set(res.access_token); nav('/'); }
+    try{ const res=await api.login(u,p); tokenStore.set(); nav('/'); }
     catch(e){ setError('Login failed. Check API URL, username, and password.'); }
     finally{ setLoading(false); }
   }

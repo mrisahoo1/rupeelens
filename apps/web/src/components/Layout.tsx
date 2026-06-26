@@ -1,7 +1,7 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BarChart3, Upload, ReceiptText, Sparkles, WalletCards, RotateCcw, FileText, Landmark, Settings, ShieldCheck, PlugZap, LogOut, Menu, Bell, Shield } from 'lucide-react';
-import { tokenStore, type User } from '../api';
+import { api, tokenStore, type User } from '../api';
 import { Badge, GhostButton } from './ui';
 
 const nav = [['Dashboard','/',BarChart3],['Upload Center','/upload',Upload],['Transactions','/transactions',ReceiptText],['Insights','/insights',Sparkles],['Budgets','/budgets',WalletCards],['Revisit Board','/revisit',RotateCcw],['Reports','/reports',FileText],['Accounts & Cards','/accounts',Landmark],['Rules','/rules',ShieldCheck],['BillPay & Integrations','/integrations',PlugZap],['Settings','/settings',Settings]] as const;
@@ -10,7 +10,7 @@ function NavItems(){ return <nav className="grid gap-1.5">{nav.map(([label,path,
 
 export default function Layout({user}:{user:User}) {
   const navigate = useNavigate();
-  const logout = () => { tokenStore.clear(); navigate('/login'); };
+  const logout = async () => { try { await api.logout(); } finally { tokenStore.clear(); navigate('/login'); } };
   return <div className="min-h-screen lg:flex">
     <aside className="hidden lg:sticky lg:top-0 lg:flex lg:h-screen lg:w-80 lg:flex-col lg:border-r lg:border-white/10 lg:bg-[#050b09]/82 lg:p-5 lg:backdrop-blur-2xl">
       <div className="mb-7 flex items-center gap-3">
